@@ -1,0 +1,21 @@
+﻿@page "/all-side-by-side"
+@using ValueAndOnInputIssueRepro.Client.Components
+@using ValueAndOnInputIssueRepro.Client.Enums
+
+<PageTitle>All Side by Side</PageTitle>
+
+<h1>All Side by Side</h1>
+<div style="outline:1px solid black; padding: 0.5rem">
+    <ShowBehavior Behavior="WhichBehavior.BindValueAndOnInput" />
+</div>
+
+<div style="outline:1px solid black; padding: 0.5rem">
+    <ShowBehavior Behavior="WhichBehavior.BindValueGetAndSetAndOnInput" />
+</div>
+
+<div style="outline:1px solid black; padding: 0.5rem">
+    <ShowBehavior Behavior="WhichBehavior.BindValueAndOnChange" />
+</div>
+
+@code {
+}

@@ -1,0 +1,210 @@
+﻿@using ValueAndOnInputIssueRepro.Client.Enums
+
+@if (Behavior == WhichBehavior.BindValueAndOnInput)
+{
+    <h2><code>@@bind-value</code> &amp; <code>@@oninput</code></h2>
+    <p>
+        Click on the low end of either <code>This</code> or <code>That</code>.<br/>
+        Notice that, on the first click, the value is bounded such that the other cannot exceed 10.<br/>
+        But click it again, and the value will be set lower than intended.
+    </p>
+    <p>
+        From a fresh start, if you "click and drag" either input down,<br/>
+        notice that the other value adjusts accordingly.<br/>
+        But if you drag too far and then release, the value will exceed its intended bounds.
+    </p>
+
+    <label for="input-this" style="min-width: 2rem">This:</label>
+    <input id="input-this" type="range"
+        @bind-value="This"
+        @oninput="OnInputThis"
+        min="0"
+        max="10"
+    /> @* Min and max values SHOWN, not to be confused with ALLOWED *@
+    <code style="padding-left: 0.25rem">@This</code>
+
+    <br/>
+    <label for="input-that" style="min-width: 2rem">That:</label>
+    <input id="input-that" type="range"
+        @bind-value="That"
+        @oninput="OnInputThat"
+        min="0"
+        max="10"
+    />
+    <code style="padding-left: 0.25rem">@That</code>
+    <br/><br/>
+    
+    <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
+}
+else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
+{
+    <h2><code>@@bind-value:get</code> &amp; <code>@@bind-value:set</code> &amp; <code>@@oninput</code></h2>
+    <p>
+        Click / click and drag either input as you please.<br/>
+        When you release, you will find that each value retains its intended boundary.
+    </p>
+
+    <label for="input-this" style="min-width: 2rem">This:</label>
+    <input id="input-this" type="range"
+        @bind-value:get="This"
+        @bind-value:set="OnInputThisWithValue"
+        @oninput="OnInputThis"
+        min="0"
+        max="10"
+    />
+    <code style="padding-left: 0.25rem">@This</code>
+
+    <br/>
+    <label for="input-that" style="min-width: 2rem">That:</label>
+    <input id="input-that" type="range"
+        @bind-value:get="That"
+        @bind-value:set="OnInputThatWithValue"
+        @oninput="OnInputThat"
+        min="0"
+        max="10"
+    />
+    <code style="padding-left: 0.25rem">@That</code>
+    <br/><br/>
+    
+    <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
+}
+else @* Commented-out "bind-value" and "onchange" *@
+{
+    <h2><code>@@bind-value</code> &amp; <code>@@onchange</code></h2>
+    <p>
+        Feel free to uncomment the CSHTML below this paragraph in the code.<br/>
+        When you do, you will be presented with the following error:<br/>
+        <br/>
+        <code>RZ10008</code>
+        <i>
+            The attribute 'onchange' is used two or more times for this element.
+            Attributes must be unique (case-insensitive). The attribute
+            'onchange' is used by the '@@bind-value' directive attribute.
+        </i>
+    </p>
+
+    @*
+    <label for="input-this" style="min-width: 2rem">This:</label>
+    <input id="input-this" type="range"
+           @bind-value="This"
+           @onchange="OnInputThis"
+           min="0"
+           max="10" />
+    <code style="padding-left: 0.25rem">@This</code>
+
+    <br />
+    <label for="input-that" style="min-width: 2rem">That:</label>
+    <input id="input-that" type="range"
+           @bind-value="That"
+           @onchange="OnInputThat"
+           min="0"
+           max="10" />
+    <code style="padding-left: 0.25rem">@That</code>
+    <br />
+    <br />
+
+    <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
+   *@
+}
+
+@code {
+    [Parameter]
+    public WhichBehavior Behavior { get; set; }
+
+    private int This;
+    private int That;
+
+    private int MinThis;
+    private int MaxThis;
+    private int MinThat;
+    private int MaxThat;
+
+    protected override void OnInitialized()
+    {
+        Reset();
+    }
+
+    private void Reset()
+    {
+        This = 7;
+        That = 5;
+        ComputeBoundaries();
+    }
+
+    // When "This" goes up, "That" goes down, and vice versa
+    // Keep both values between 0 and 10
+    private void ComputeBoundaries()
+    {
+        int thisCanGoUp = 10 - This;
+        int thisCanGoDown = This;
+
+        int thatCanGoUp = 10 - That;
+        int thatCanGoDown = That;
+
+        int limitThisCanGoUp = Math.Min(thisCanGoUp, thatCanGoDown);
+        int limitThisCanGoDown = Math.Min(thisCanGoDown, thatCanGoUp);
+
+        int limitThatCanGoUp = Math.Min(thatCanGoUp, thisCanGoDown);
+        int limitThatCanGoDown = Math.Min(thatCanGoDown, thisCanGoUp);
+
+        MinThis = This - limitThisCanGoDown;
+        MaxThis = This + limitThisCanGoUp;
+
+        MinThat = That - limitThatCanGoDown;
+        MaxThat = That + limitThatCanGoUp;
+    }
+
+    private void OnInputThis(ChangeEventArgs args)
+        => OnInputThisWithValue(ParseRangeInput(args));
+
+    private void OnInputThisWithValue(int newThis)
+    {
+        bool recompute = ProcessGenericInput(newThis,
+            ref This, ref That,
+            MinThis, MaxThis);
+
+        if (recompute)
+        {
+            ComputeBoundaries();
+            StateHasChanged();
+        }
+    }
+
+    private void OnInputThat(ChangeEventArgs args)
+        => OnInputThatWithValue(ParseRangeInput(args));
+
+    private void OnInputThatWithValue(int newThat)
+    {
+        bool recompute = ProcessGenericInput(newThat,
+            ref That, ref This,
+            MinThat, MaxThat);
+
+        if (recompute)
+        {
+            ComputeBoundaries();
+            StateHasChanged();
+        }
+    }
+
+    private static int ParseRangeInput(ChangeEventArgs args, int fallback = 0)
+        => int.TryParse(args?.Value?.ToString(), out int val) ? val : fallback;
+
+    private static bool ProcessGenericInput(int newValue,
+        ref int one, ref int two,
+        int minOne, int maxOne)
+    {
+        int newOne = MinMax(newValue, minOne, maxOne);
+        int currOne = one;
+        int diff = newOne - currOne;
+
+        if (diff == 0) return false;
+
+        one = newOne;
+        two -= diff;
+
+        return true;
+    }
+
+    private static int MinMax(int val, int min, int max)
+        => Math.Max(min, Math.Min(max, val));
+}
