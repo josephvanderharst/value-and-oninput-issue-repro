@@ -14,24 +14,24 @@
         But if you drag too far and then release, the value will exceed its intended bounds.
     </p>
 
-    <label for="input-this" style="min-width: 2rem">This:</label>
+    <label for="input-this">This:</label>
     <input id="input-this" type="range"
         @bind-value="This"
         @oninput="OnInputThis"
         min="0"
         max="10"
     /> @* Min and max values SHOWN, not to be confused with ALLOWED *@
-    <code style="padding-left: 0.25rem">@This</code>
+    <code>@This</code>
 
     <br/>
-    <label for="input-that" style="min-width: 2rem">That:</label>
+    <label for="input-that">That:</label>
     <input id="input-that" type="range"
         @bind-value="That"
         @oninput="OnInputThat"
         min="0"
         max="10"
     />
-    <code style="padding-left: 0.25rem">@That</code>
+    <code>@That</code>
     <br/><br/>
     
     <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
@@ -44,7 +44,7 @@ else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
         When you release, you will find that each value retains its intended boundary.
     </p>
 
-    <label for="input-this" style="min-width: 2rem">This:</label>
+    <label for="input-this">This:</label>
     <input id="input-this" type="range"
         @bind-value:get="This"
         @bind-value:set="OnInputThisWithValue"
@@ -52,10 +52,10 @@ else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
         min="0"
         max="10"
     />
-    <code style="padding-left: 0.25rem">@This</code>
+    <code>@This</code>
 
     <br/>
-    <label for="input-that" style="min-width: 2rem">That:</label>
+    <label for="input-that">That:</label>
     <input id="input-that" type="range"
         @bind-value:get="That"
         @bind-value:set="OnInputThatWithValue"
@@ -63,7 +63,7 @@ else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
         min="0"
         max="10"
     />
-    <code style="padding-left: 0.25rem">@That</code>
+    <code>@That</code>
     <br/><br/>
     
     <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
@@ -84,22 +84,22 @@ else @* Commented-out "bind-value" and "onchange" *@
     </p>
 
     @*
-    <label for="input-this" style="min-width: 2rem">This:</label>
+    <label for="input-this">This:</label>
     <input id="input-this" type="range"
            @bind-value="This"
            @onchange="OnInputThis"
            min="0"
            max="10" />
-    <code style="padding-left: 0.25rem">@This</code>
+    <code>@This</code>
 
     <br />
-    <label for="input-that" style="min-width: 2rem">That:</label>
+    <label for="input-that">That:</label>
     <input id="input-that" type="range"
            @bind-value="That"
            @onchange="OnInputThat"
            min="0"
            max="10" />
-    <code style="padding-left: 0.25rem">@That</code>
+    <code>@That</code>
     <br />
     <br />
 

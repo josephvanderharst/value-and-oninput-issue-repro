@@ -1,0 +1,12 @@
+﻿label[for*="input-"] {
+    display: inline-block;
+    min-width: 2.25rem;
+}
+
+input[id*="input-"] ~ code {
+    padding-left: 0.25rem;
+}
+
+code {
+    font-size: 1em;
+}
