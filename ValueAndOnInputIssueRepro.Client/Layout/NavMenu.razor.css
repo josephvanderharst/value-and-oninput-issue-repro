@@ -51,25 +51,25 @@
     padding-bottom: 0.5rem;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
+.nav-item:first-of-type {
+    padding-top: 1rem;
+}
 
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
+.nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
 
-    .nav-item ::deep .nav-link {
-        color: #d7d7d7;
-        background: none;
-        border: none;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-        width: 100%;
-    }
+.nav-item ::deep .nav-link {
+    color: #d7d7d7;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    width: 100%;
+}
 
 .nav-item ::deep a.active {
     background-color: rgba(255,255,255,0.37);
@@ -79,6 +79,12 @@
 .nav-item ::deep .nav-link:hover {
     background-color: rgba(255,255,255,0.1);
     color: white;
+}
+
+.nav-item ::deep .nav-link[target="_blank"]::after {
+    content: "\f1c5"; /* bi-box-arrow-up-right */
+    font-family: bootstrap-icons !important;
+    padding-left: 0.5rem;
 }
 
 .nav-scrollable {
