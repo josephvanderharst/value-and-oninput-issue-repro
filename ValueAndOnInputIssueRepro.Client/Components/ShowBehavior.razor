@@ -13,68 +13,22 @@
         notice that the other value adjusts accordingly.<br/>
         But if you drag too far and then release, the value will exceed its intended bounds.
     </p>
-
-    <label for="input-this">This:</label>
-    <input id="input-this" type="range"
-        @bind-value="This"
-        @oninput="OnInputThis"
-        min="0"
-        max="10"
-    /> @* Min and max values SHOWN, not to be confused with ALLOWED *@
-    <code>@This</code>
-
-    <br/>
-    <label for="input-that">That:</label>
-    <input id="input-that" type="range"
-        @bind-value="That"
-        @oninput="OnInputThat"
-        min="0"
-        max="10"
-    />
-    <code>@That</code>
-    <br/><br/>
-    
-    <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
 }
 else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
 {
     <h2><code>@@bind-value:get</code> &amp; <code>@@bind-value:set</code> &amp; <code>@@oninput</code></h2>
     <p>
-        Click / click and drag either input as you please.<br/>
+        Click / click and drag either input as you please.<br />
         When you release, you will find that each value retains its intended boundary.
     </p>
-
-    <label for="input-this">This:</label>
-    <input id="input-this" type="range"
-        @bind-value:get="This"
-        @bind-value:set="OnInputThisWithValue"
-        @oninput="OnInputThis"
-        min="0"
-        max="10"
-    />
-    <code>@This</code>
-
-    <br/>
-    <label for="input-that">That:</label>
-    <input id="input-that" type="range"
-        @bind-value:get="That"
-        @bind-value:set="OnInputThatWithValue"
-        @oninput="OnInputThat"
-        min="0"
-        max="10"
-    />
-    <code>@That</code>
-    <br/><br/>
-    
-    <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
 }
-else @* Commented-out "bind-value" and "onchange" *@
+else
 {
     <h2><code>@@bind-value</code> &amp; <code>@@onchange</code></h2>
     <p>
-        Feel free to uncomment the CSHTML below this paragraph in the code.<br/>
-        When you do, you will be presented with the following error:<br/>
-        <br/>
+        Feel free to uncomment the commented inputs below in the code.<br />
+        When you do, you will be presented with the following error:<br />
+        <br />
         <code>RZ10008</code>
         <i>
             The attribute 'onchange' is used two or more times for this element.
@@ -82,29 +36,91 @@ else @* Commented-out "bind-value" and "onchange" *@
             'onchange' is used by the '@@bind-value' directive attribute.
         </i>
     </p>
+}
 
-    @*
+@if (Behavior != WhichBehavior.BindValueAndOnChange)
+{
     <label for="input-this">This:</label>
+}
+@if (Behavior == WhichBehavior.BindValueAndOnInput)
+{
     <input id="input-this" type="range"
-           @bind-value="This"
-           @onchange="OnInputThis"
-           min="0"
-           max="10" />
+        @bind-value="This"
+        @oninput="OnInputThis"
+        min="0"
+        max="10"
+    /> @* Min and max values SHOWN, not to be confused with ALLOWED *@
+}
+else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
+{
+    <input id="input-this" type="range"
+        @bind-value:get="This"
+        @bind-value:set="OnInputThisWithValue"
+        @oninput="OnInputThis"
+        min="0"
+        max="10"
+    />
+}
+else
+{
+    @*
+    <input id="input-this" type="range"
+        @bind-value="This"
+        @onchange="OnInputThis"
+        min="0"
+        max="10" />
     <code>@This</code>
+    *@
+}
+@if (Behavior != WhichBehavior.BindValueAndOnChange)
+{
+    <code>@This</code>
+    <br/>
+}
 
-    <br />
+@if (Behavior != WhichBehavior.BindValueAndOnChange)
+{
     <label for="input-that">That:</label>
+}
+@if (Behavior == WhichBehavior.BindValueAndOnInput)
+{
     <input id="input-that" type="range"
-           @bind-value="That"
-           @onchange="OnInputThat"
-           min="0"
-           max="10" />
+        @bind-value="That"
+        @oninput="OnInputThat"
+        min="0"
+        max="10"
+    />
+}
+else if (Behavior == WhichBehavior.BindValueGetAndSetAndOnInput)
+{
+    <input id="input-that" type="range"
+        @bind-value:get="That"
+        @bind-value:set="OnInputThatWithValue"
+        @oninput="OnInputThat"
+        min="0"
+        max="10"
+    />
+}
+else
+{
+    @*
+    <input id="input-that" type="range"
+        @bind-value="That"
+        @onchange="OnInputThat"
+        min="0"
+        max="10" />
     <code>@That</code>
-    <br />
-    <br />
-
+    *@
+}
+@if (Behavior != WhichBehavior.BindValueAndOnChange)
+{
+    <code>@That</code>
+    <br/><br/>
+}
+    
+@if(Behavior != WhichBehavior.BindValueAndOnChange)
+{
     <button type="button" class="btn btn-danger" @onclick="Reset">Reset</button>
-   *@
 }
 
 @code {
